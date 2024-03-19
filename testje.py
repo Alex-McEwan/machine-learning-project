@@ -1,5 +1,2 @@
-import numpy
+import numpy as np
 
-#werkt dit
-#nog een keer
-#lees ook mijn comment
