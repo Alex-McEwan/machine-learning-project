@@ -53,6 +53,15 @@ class Player:
 
         raise NotImplementedError('get_attack_areas()')
 
+class AiPlayer:
+    """A deep learned AI player"""
+    def __init__(self):
+        self.playername='AiPlayer'
+        print(f'Initializing player from standard library with name:',self.playername)
+        
+    def get_attack_areas(self, grid, match_state, *args, **kwargs):
+        return None
+        
 
 class PassivePlayer(Player):
     """A lazy AI player that never attacks (for testing)."""

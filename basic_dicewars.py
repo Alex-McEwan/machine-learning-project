@@ -1,21 +1,21 @@
 from dicewars.match import Match
 from dicewars.game import Game
-from dicewars.player import DefaultPlayer, AgressivePlayer, RandomPlayer, WeakerPlayerAttacker
+from dicewars.player import DefaultPlayer, AgressivePlayer, RandomPlayer, WeakerPlayerAttacker, AiPlayer
 from importlib import import_module
 
 
 
-RENDER = True
+RENDER = False
 
 
 
 PlayerX = import_module('playergroupX').Player() 
 
 # a list of all participating Player objects
-#players = [DefaultPlayer(), AgressivePlayer(), RandomPlayer(), WeakerPlayerAttacker()]
+players = [AiPlayer(), AgressivePlayer(), RandomPlayer(), WeakerPlayerAttacker()]
 #players = [PlayerX, AgressivePlayer(), RandomPlayer(), WeakerPlayerAttacker()]
 #players = [PlayerX, AgressivePlayer(), AgressivePlayer(),AgressivePlayer()]
-players = [PlayerX,PlayerX,PlayerX,AgressivePlayer()]
+#players = [PlayerX,PlayerX,PlayerX,AgressivePlayer()]
 playernames=[]
 for i in range(len(players)):
     playernames.append(players[i].playername)
@@ -25,6 +25,9 @@ print(playernames)
 # set up the game
 game = Game(num_seats=len(players))
 match = Match(game)
+
+# number of games to train on
+nGames = 10
 
 # # Instead of the above we can also load a previously saved match with the code below
 # match = Match.load("filename")
@@ -41,19 +44,22 @@ match = Match(game)
 grid, state = match.game.grid, match.state
 
 # play the game until finsihed
-while True:
-    # get an action from the current player
-    currentplayer = players[state.player]
-    action = currentplayer.get_attack_areas(grid, state)
-    
-    grid, state = match.step(action)
-#    print(match.state) 
-    # render for graphical representation of gamestate
-    if RENDER:
-        match.render()
-    
-    # quit if game is finished
-    if state.winner != -1:
-        break
+for n in range(nGames+1):
+    while True:
+        # get an action from the current player
+        currentplayer = players[state.player]
+        action = currentplayer.get_attack_areas(grid, state)
+        #print for debugging
+        print(f'{currentplayer.playername}, {action}')
+        
+        grid, state = match.step(action)
+    #    print(match.state) 
+        # render for graphical representation of gamestate
+        if RENDER:
+            match.render()
+        
+        # quit if game is finished
+        if state.winner != -1:
+            break
 
 print(f"Winner: player {state.winner}, {players[state.winner].playername}")   
