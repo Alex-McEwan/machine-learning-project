@@ -1,8 +1,6 @@
 from dicewars import player
 from random import choice
-import numpy as np
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+
 class Player(player.Player):
     """
     Modify the get_attack_areas function using your own player.
@@ -15,26 +13,10 @@ class Player(player.Player):
         use relative paths for access to stored files that you require
         use self.variable to store your variables such that your class has access.
         """
-        self.playername='AIPlayer'
+        self.playername='AlexYorick'
         print(f'Initializing player from: {__file__} with name:',self.playername)
-        
-        # Initialize Q-network
-        self.q_network = self.create_q_network()
-        self.replay_buffer = []  # Initialize replay buffer
-        self.epsilon = 1.0  # Initial exploration rate
-        self.epsilon_decay = 0.995  # Decay rate for exploration rate
-        self.epsilon_min = 0.01  # Minimum exploration rate
-        self.gamma = 0.95  # Discount factor
 
-    def create_q_network(self):
-        # Define neural network architecture
-        model = Sequential([
-            Dense(2, activation='relu', input_shape=(state_size,)),
-            Dense(10, activation='relu'),
-            Dense(1)  # Output layer for Q-values
-        ])
-        model.compile(optimizer='adam', loss='mse')  # Compile the model
-        return model
+        #self.model = ...
 
 
     def get_attack_areas(self, grid, match_state):
