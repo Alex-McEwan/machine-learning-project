@@ -3,8 +3,11 @@ from random import choice
 import numpy as np
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Flatten
+from tensorflow.keras.layers import Activation
+from keras.optimizers import Adam
 class Player(player.Player):
-    state_size = 3
+
     """
     Modify the get_attack_areas function using your own player.
 
@@ -29,16 +32,37 @@ class Player(player.Player):
 
     def create_q_network(self):
         # Define neural network architecture
-        model = Sequential([
-            Dense(2, activation='relu', input_shape=(state_size,)),
-            Dense(10, activation='relu'),
-            Dense(1)  # Output layer for Q-values
-        ])
+        model = Sequential()
+        model.add(Flatten(input_shape = (1,) ))
+        model.add(Dense(2))
+        model.add(Activation('relu'))
+        model.add(Dense(10))
+        model.add(Activation('relu'))
+        model.add(Dense(20))
+        model.add(Activation('relu'))
+        model.add(Dense(10))
+        model.add(Activation('relu'))
+        model.add(Dense(1))
+        print(model.summary())
+
+    
         model.compile(optimizer='adam', loss='mse')  # Compile the model
         return model
-
+    
+    
 
     def get_attack_areas(self, grid, match_state):
+        self.grid = grid
+        self.match_state = match_state
+        possible_attacks = self.get_possible_attacks(grid, match_state)
+        
+        if np.random.rand() < self.epsilon:
+            return choice(possible_attacks)
+        else:
+            q_values = self.q_network.predict(state)
+
+
+    def get_possible_attacks(self, grid, match_state):
         """
         REWRITE THIS FUNCTION FOR YOUR OWN MACHINE LEARNING AGENT
         """
@@ -62,4 +86,4 @@ class Player(player.Player):
                         #append the area to the possible attack options
                         possible_attacks.append( (from_area, to_area) )
         
-        return choice(possible_attacks)
+        return possible_attacks
