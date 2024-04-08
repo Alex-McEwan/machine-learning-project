@@ -52,14 +52,13 @@ class Player(player.Player):
     
 
     def get_attack_areas(self, grid, match_state):
-        self.grid = grid
-        self.match_state = match_state
         possible_attacks = self.get_possible_attacks(grid, match_state)
-        
+        print(possible_attacks)
+        print(match_state.area_num_dice)
         if np.random.rand() < self.epsilon:
             return choice(possible_attacks)
         else:
-            q_values = self.q_network.predict(state)
+            q_values = self.q_network.predict(state, match_state.area)
 
 
     def get_possible_attacks(self, grid, match_state):
