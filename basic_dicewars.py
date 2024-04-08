@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 RENDER = True
 
 # number of games to train on
-nGames = 1
+nGames = 10
 
 
 PlayerX = import_module('playergroupX').Player() 

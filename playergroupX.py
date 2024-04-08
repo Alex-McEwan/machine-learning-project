@@ -33,7 +33,7 @@ class Player(player.Player):
     def create_q_network(self):
         # Define neural network architecture
         model = Sequential()
-        model.add(Flatten(input_shape = (1,) ))
+        model.add(Flatten(input_shape = (2,) ))
         model.add(Dense(2))
         model.add(Activation('relu'))
         model.add(Dense(10))
@@ -58,8 +58,13 @@ class Player(player.Player):
         if np.random.rand() < self.epsilon:
             return choice(possible_attacks)
         else:
-            q_values = self.q_network.predict(state, match_state.area)
-
+            eval_attack = choice(possible_attacks)
+            
+            for i in range(1, len(eval_attack)):
+                q_values = self.q_network.predict(match_state.area_num_dice[eval_attack[i]], match_state.area_num_dice[eval_attack[1]])
+                
+                
+            return np.argmax(q_values)
 
     def get_possible_attacks(self, grid, match_state):
         """
